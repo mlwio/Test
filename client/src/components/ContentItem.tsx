@@ -57,14 +57,12 @@ export function ContentItem({ item, index }: ContentItemProps) {
           </h3>
         </div>
 
-        <div className="flex gap-4 md:contents">
-          <div className="w-24 flex-shrink-0 text-muted-foreground text-sm" data-testid={`text-year-${item._id}`}>
-            {item.releaseYear || 'N/A'}
-          </div>
+        <div className="w-24 flex-shrink-0 text-muted-foreground text-sm" data-testid={`text-year-${item._id}`}>
+          {item.releaseYear || 'N/A'}
+        </div>
 
-          <div className="w-32 flex-shrink-0 text-muted-foreground text-sm" data-testid={`text-category-${item._id}`}>
-            {item.category}
-          </div>
+        <div className="w-32 flex-shrink-0 text-muted-foreground text-sm" data-testid={`text-category-${item._id}`}>
+          {item.category}
         </div>
 
         <div className="flex items-center gap-2 w-full md:w-auto flex-shrink-0">
