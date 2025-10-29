@@ -1,0 +1,77 @@
+Step 1: User Login and Authentication
+
+The login route (/api/auth/login) verifies the user’s username and password.
+
+Use a password hashing library (like bcrypt) to safely compare passwords.
+
+On successful login, the server generates a JWT token.
+
+The token contains user information (like id and username) and is sent to the client.
+
+Step 2: JWT Token
+
+JWT (JSON Web Token) is a secure signed string created with a server secret key.
+
+It lets the server verify that a request is coming from an authenticated user.
+
+Tokens usually expire after a certain time (e.g., 1 hour).
+
+Define the secret key in an environment file: JWT_SECRET=someStrongSecretKey.
+
+Step 3: Authentication Middleware (Token Verification)
+
+Routes that require authentication should have a middleware that:
+
+Checks if the request contains a token in the Authorization header.
+
+Verifies the token using the server’s secret key.
+
+If the token is valid, allows the request to proceed.
+
+If the token is missing or invalid, responds with 401 Unauthorized.
+
+Step 4: Protect Content Routes
+
+Apply the auth middleware to protected routes like /api/content.
+
+The middleware ensures only authenticated users can access the content.
+
+Once verified, the server fetches content from storage (in-memory or database) and returns it.
+
+Step 5: Client-Side Handling
+
+After login, the client receives the JWT token.
+
+For every request to a protected route, the client sends the token in the header:
+
+Header Name: Authorization
+
+Format: Bearer <token>
+
+The server validates the token before returning content.
+
+Step 6: Database Storage (Optional)
+
+Storage classes (like DbStorage) handle content creation, reading, updating, and deleting.
+
+Database connection is independent of authentication.
+
+Once a user is verified, the server fetches content from the storage and returns it.
+
+Step 7: Summary Flow
+
+User logs in → server verifies password → generates JWT → sends token to client.
+
+Client requests /api/content → includes token in Authorization header.
+
+Server verifies token → if valid, returns content.
+
+If token is missing or invalid → server responds with 401 Unauthorized.
+
+💡 Important Notes:
+
+This prompt focuses only on authentication flow and content access.
+
+It does not mention deploy-specific issues like Render service or database upload problems.
+
+Following this will completely solve 401 Unauthorized issues conceptually.

@@ -1,0 +1,174 @@
+I want you to build a full web admin panel and dashboard system named MLWIO API,
+which will look and feel exactly like the page https://blakiteapi.xyz/admin/links
+ — the same theme, color palette, layout, spacing, and typography.
+
+Below are all detailed requirements. Analyze carefully and follow exactly.
+
+⚙️ General Setup
+
+Use Node.js + Express for the backend.
+
+Use MongoDB + Mongoose for the database.
+
+Use EJS or React + Tailwind CSS for the frontend (it must visually match Blakite’s admin page).
+
+The project must be fully deployable on Render.com (include all required configuration files).
+
+🔐 Login Page
+
+Username: mlwioapi
+
+Password: MLWIO.0372
+
+Full-page background must show my logo faded in.
+
+Centered login box, styled with the same theme as Blakite’s page.
+
+On successful login, redirect to /admin/dashboard.
+
+🧭 Dashboard Page (/admin/dashboard)
+
+The dashboard must look identical to the Blakite API admin links page — same layout, background color, fonts, card styles, spacing, and proportions.
+
+Header (Top Bar):
+
+Left: text → MLWIO API
+
+Right: only one button → Upload
+
+(❌ Remove the previous search button from the header completely.)
+
+Footer:
+
+Center text → Provided by MLWIO
+
+🧩 New Section Below Header
+
+Under the header, add a new section that includes:
+
+A Category Selector (Movie / Anime / Web Series).
+
+When a category is selected, only items from that category should appear on the dashboard.
+
+A large Search button beside it.
+
+Remove the old search button from the header entirely.
+
+Also make the dashboard items visually improved:
+
+Add slight gaps between each row/item.
+
+Make all items have rounded corners on all 4 sides.
+
+On hover (when the mouse cursor is over an item):
+
+The card should slightly lift upward,
+
+Change its color, and
+
+Show a soft 3D effect (light shadow animation).
+
+Also, at the top of the dashboard list, include the Thumbnail, Title, and Category labels (like before).
+
+🎬 Upload Section (/admin/upload)
+
+When the Upload button is clicked:
+
+Go to the upload page.
+
+The Upload button on the header changes to a Home button, which returns to the dashboard.
+
+Upload Fields:
+
+Name (text input)
+
+Category (dropdown: Movie / Anime / Web Series)
+
+If Movie is selected → show a single Drive Link input field.
+
+If Anime / Web Series is selected →
+
+Show a dropdown to choose the number of seasons (1–10).
+
+Automatically generate that many season sections.
+
+Each season section should have input fields where the user can type episode links manually.
+
+Automatically count and label episodes (E01, E02, etc.).
+
+Thumbnail Link input field.
+
+🟢 When submitted:
+
+Save the data to MongoDB.
+
+Display it on the dashboard under its respective category (Movie / Anime / Web Series).
+
+🔍 Search Feature
+
+The new search button (below header) should open a small popup or inline search area:
+
+Category selector (Movie / Anime / Web Series).
+
+Text input to type a title.
+
+Show matched results instantly (live search).
+
+🧱 Dashboard Layout
+
+Default category view: Movies.
+
+Rows/cards should show:
+
+Thumbnail
+
+Title
+
+Category
+
+Drive link or view button
+
+For Anime / Web Series:
+
+Each item expands when clicked.
+
+When expanded, show the season list and under each season, all episode links labeled automatically (e.g., S1 E01–E05).
+
+IMPORTANT ADDITION (as requested):
+
+The anime / season display style must be copied A-to-Z from https://blakiteapi.xyz/admin/links
+ — replicate the way seasons, episode lists, numbering, expand/collapse behavior, spacing, and visual presentation exactly the same as that page. The anime/season UI should match Blakite’s implementation in all visual and interaction details.
+
+🎨 Design & Theme
+
+Theme must be visually identical to Blakite API’s admin links page.
+
+Same background, colors, shadows, spacing, and button style.
+
+Responsive for mobile devices.
+
+Footer fixed to bottom.
+
+Smooth hover animation with subtle 3D lift, light color transition.
+
+Same theme continues across login, dashboard, and upload pages (MLWIO theme).
+
+🚀 Deployment
+
+Must be ready for Render.com deployment.
+
+Include server.js, Procfile, and environment setup for MONGODB_URI.
+
+Use the hardcoded login credentials above (no registration needed).
+
+✅ Summary
+
+✅ Login with logo background
+✅ Dashboard identical to Blakite’s
+✅ Header has only Upload button
+✅ New category + search section below header
+✅ Hover animation + rounded corners + 3D lift effect
+✅ Upload system supports manual typing of episodes
+✅ Anime/season UI copied A-to-Z from Blakite page
+✅ Footer “Provided by MLWIO”
+✅ Deploy-ready for Render.com
