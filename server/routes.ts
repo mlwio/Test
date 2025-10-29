@@ -135,7 +135,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       return res.json(content);
-    } catch (error) {
+    } catch (error: any) {
+      // Handle invalid MongoDB ObjectId format
+      if (error.name === 'CastError' || error.kind === 'ObjectId') {
+        return res.status(404).json({ error: "Content not found" });
+      }
       console.error("Get content by ID error:", error);
       return res.status(500).json({ error: "Internal server error" });
     }
