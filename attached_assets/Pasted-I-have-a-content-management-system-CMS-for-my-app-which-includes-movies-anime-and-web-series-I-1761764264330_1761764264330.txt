@@ -1,0 +1,47 @@
+I have a content management system (CMS) for my app, which includes movies, anime, and web series. I want to fix and improve the dashboard, upload section, and API so that the app works like YouTube in terms of layout and functionality. Please follow these requirements:
+
+1. **Dashboard Layout**:
+   - Display content in the following order:
+     1. Thumbnail
+     2. Title
+     3. Release Year
+     4. Category
+   - The order must remain exactly as above, and additional fields should appear in the same sequence if needed.
+
+2. **Upload Section Requirements**:
+   - When uploading new content, the following fields should appear **in this exact order**:
+     1. Title (required)
+     2. Release Year (required)
+     3. Category (required)
+     4. Thumbnail URL (required)
+     5. Video Link (required)
+   - Placeholder text in the write boxes (e.g., "(e.g., ...)") should be removed automatically.
+   - Ensure proper validations so that required fields cannot be empty.
+
+3. **API Requirements**:
+   - Currently, when the app sends requests, it often returns **empty data or errors**, and the mobile app cannot display content correctly.
+   - Fix the API so that:
+     - GET `/api/content` → returns a list of all content with: thumbnail, title, release year, category.
+     - GET `/api/content/:id` → returns full details including video link.
+     - GET `/api/content/search?q=<search_term>` → returns matching content with case-insensitive and partial match (so search like "Iron Man 1 2008" or "Iron Man 1" works).
+   - Ensure proper URL encoding for spaces and special characters.
+
+4. **App Behavior Requirements**:
+   - When a user opens the app, the content list should display **exactly like YouTube**:
+     - Thumbnail on top
+     - Below thumbnail: Title + Release Year + Category
+   - When a user clicks on a post:
+     - The app should send a request to the API for the video link.
+     - The video should load immediately in the player.
+     - The experience should feel like YouTube, where clicking directly plays the video.
+
+5. **Additional Notes**:
+   - Backend uses Node.js, Express, and MongoDB.
+   - Ensure CORS is configured so the app can fetch data without errors.
+   - Provide ready-to-use code or step-by-step instructions to implement:
+     - Dashboard layout
+     - Upload field validations (exact order: Title → Release Year → Category → Thumbnail → Video Link)
+     - Fixed API for search, fetch, and video link
+     - Proper JSON output for the app to display thumbnails, titles, release year, and category correctly.
+
+Please provide a complete solution to make the dashboard, upload section, API, and app display fully functional and user-friendly.

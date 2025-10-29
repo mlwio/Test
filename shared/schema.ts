@@ -40,9 +40,9 @@ export type Episode = {
 export interface IContentItem extends Document {
   _id: string;
   title: string;
+  releaseYear: number;
   category: string;
   thumbnail: string;
-  releaseYear?: number;
   driveLink?: string;
   seasons?: Season[];
   createdAt: Date;
@@ -58,9 +58,9 @@ const seasonSchema = new Schema({
 
 const contentItemSchema = new Schema<IContentItem>({
   title: { type: String, required: true },
+  releaseYear: { type: Number, required: true },
   category: { type: String, required: true },
   thumbnail: { type: String, required: true },
-  releaseYear: { type: Number },
   driveLink: { type: String },
   seasons: [seasonSchema],
   createdAt: { type: Date, required: true, default: Date.now },
@@ -70,15 +70,15 @@ export const ContentItemModel = mongoose.models.ContentItem || mongoose.model<IC
 
 export const insertContentItemSchema = z.object({
   title: z.string().min(1),
+  releaseYear: z.number().min(1900).max(2100),
   category: z.string().min(1),
-  thumbnail: z.string().min(1),
-  releaseYear: z.number().optional(),
-  driveLink: z.string().optional(),
+  thumbnail: z.string().url(),
+  driveLink: z.string().url().optional(),
   seasons: z.array(z.object({
     seasonNumber: z.number(),
     episodes: z.array(z.object({
       episodeNumber: z.number(),
-      link: z.string(),
+      link: z.string().url(),
     })),
   })).optional(),
 });
@@ -87,9 +87,9 @@ export type InsertContentItem = z.infer<typeof insertContentItemSchema>;
 export type ContentItem = {
   _id: string;
   title: string;
+  releaseYear: number;
   category: string;
   thumbnail: string;
-  releaseYear?: number;
   driveLink?: string;
   seasons?: Season[];
   createdAt: Date;

@@ -64,6 +64,7 @@ export default function LoginPage() {
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 placeholder="Enter username"
+                autoComplete="username"
                 disabled={isLoading}
                 data-testid="input-username"
               />
@@ -76,6 +77,7 @@ export default function LoginPage() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Enter password"
+                autoComplete="current-password"
                 disabled={isLoading}
                 data-testid="input-password"
               />

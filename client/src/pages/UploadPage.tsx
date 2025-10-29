@@ -100,11 +100,20 @@ export default function UploadPage() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
+    if (!releaseYear) {
+      toast({
+        title: "Validation Error",
+        description: "Release Year is required",
+        variant: "destructive",
+      });
+      return;
+    }
+
     const contentData: InsertContentItem = {
       title,
+      releaseYear: parseInt(releaseYear),
       category,
       thumbnail,
-      releaseYear: releaseYear ? parseInt(releaseYear) : undefined,
       driveLink: category === "Movie" ? driveLink : undefined,
       seasons:
         category !== "Movie"
@@ -137,22 +146,21 @@ export default function UploadPage() {
                   id="title"
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
-                  placeholder="Enter title (e.g., Iron Man 1)"
                   required
                   data-testid="input-title"
                 />
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="releaseYear">Release Year (Optional)</Label>
+                <Label htmlFor="releaseYear">Release Year</Label>
                 <Input
                   id="releaseYear"
                   type="number"
                   value={releaseYear}
                   onChange={(e) => setReleaseYear(e.target.value)}
-                  placeholder="Enter release year (e.g., 2008)"
                   min="1900"
                   max="2100"
+                  required
                   data-testid="input-release-year"
                 />
               </div>
@@ -175,7 +183,6 @@ export default function UploadPage() {
                   id="thumbnail"
                   value={thumbnail}
                   onChange={(e) => setThumbnail(e.target.value)}
-                  placeholder="Enter thumbnail URL"
                   required
                   data-testid="input-thumbnail"
                 />
@@ -183,12 +190,11 @@ export default function UploadPage() {
 
               {category === "Movie" ? (
                 <div className="space-y-2">
-                  <Label htmlFor="driveLink">Drive Link</Label>
+                  <Label htmlFor="driveLink">Video Link</Label>
                   <Input
                     id="driveLink"
                     value={driveLink}
                     onChange={(e) => setDriveLink(e.target.value)}
-                    placeholder="Enter Google Drive link"
                     required
                     data-testid="input-drive-link"
                   />
@@ -226,7 +232,7 @@ export default function UploadPage() {
                                 onChange={(e) =>
                                   updateEpisode(seasonIndex, episodeIndex, e.target.value)
                                 }
-                                placeholder="Enter episode link"
+                                required
                                 data-testid={`input-episode-${seasonIndex}-${episodeIndex}`}
                               />
                               {season.episodes.length > 1 && (
