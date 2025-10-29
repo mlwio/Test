@@ -270,10 +270,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       console.log(`✅ Proxying download from: ${downloadUrl}`);
 
-      // Set headers for immediate download
-      res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
-      res.setHeader('Content-Type', 'application/octet-stream');
-      res.setHeader('Cache-Control', 'no-cache');
+      // Helper function to stream the final file to client with proper headers
+      const streamFile = (response: any) => {
+        const contentType = response.headers['content-type'] || 'video/mp4';
+        const contentLength = response.headers['content-length'];
+        
+        res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+        res.setHeader('Content-Type', contentType);
+        if (contentLength) {
+          res.setHeader('Content-Length', contentLength);
+        }
+        res.setHeader('Cache-Control', 'no-cache');
+        
+        console.log(`✅ Streaming file: ${filename} (${contentLength || 'unknown'} bytes, ${contentType})`);
+        response.pipe(res);
+      };
 
       // Determine protocol
       const protocol = downloadUrl.startsWith('https') ? https : http;
@@ -324,19 +335,27 @@ export async function registerRoutes(app: Express): Promise<Server> {
                   // Follow redirect
                   const redirectUrl = finalResponse.headers.location;
                   if (redirectUrl) {
-                    https.get(redirectUrl, (redirectedResponse) => {
-                      redirectedResponse.pipe(res);
+                    https.get(redirectUrl, {
+                      headers: {
+                        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+                      }
+                    }, (redirectedResponse) => {
+                      streamFile(redirectedResponse);
                     }).on('error', (err) => {
                       console.error("Redirect error:", err);
-                      res.status(500).json({ error: "Failed to follow redirect" });
+                      if (!res.headersSent) {
+                        res.status(500).json({ error: "Failed to follow redirect" });
+                      }
                     });
                   }
                 } else {
-                  finalResponse.pipe(res);
+                  streamFile(finalResponse);
                 }
               }).on('error', (err) => {
                 console.error("Final download error:", err);
-                res.status(500).json({ error: "Download failed" });
+                if (!res.headersSent) {
+                  res.status(500).json({ error: "Download failed" });
+                }
               });
             } else {
               // Could not extract download link, redirect user
@@ -355,17 +374,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
                 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
               }
             }, (redirectedResponse) => {
-              redirectedResponse.pipe(res);
+              streamFile(redirectedResponse);
             }).on('error', (err) => {
               console.error("Redirect error:", err);
-              res.status(500).json({ error: "Failed to follow redirect" });
+              if (!res.headersSent) {
+                res.status(500).json({ error: "Failed to follow redirect" });
+              }
             });
           } else {
-            res.status(500).json({ error: "Redirect location missing" });
+            if (!res.headersSent) {
+              res.status(500).json({ error: "Redirect location missing" });
+            }
           }
         } else {
           // Stream the file directly to the client
-          proxyResponse.pipe(res);
+          streamFile(proxyResponse);
         }
       });
 
