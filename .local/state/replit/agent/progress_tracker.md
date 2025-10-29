@@ -29,6 +29,14 @@
 [x] 29. Added proper error handling for invalid MongoDB ObjectIds (404 instead of 500)
 [x] 30. Tested all API endpoints to ensure correct JSON responses
 [x] 31. Updated replit.md with comprehensive documentation of API fixes
-[x] 26. Configured workflow with proper webview output type for frontend display
-[x] 27. Verified application is fully functional with login page displaying correctly
-[x] 28. All migration tasks completed successfully
+[x] 32. Configured workflow with proper webview output type for frontend display
+[x] 33. Verified application is fully functional with login page displaying correctly
+[x] 34. All migration tasks completed successfully
+[x] 35. Added optional releaseYear field to content schema, interfaces, and validation
+[x] 36. Updated storage layer (DbStorage and MemStorage) to support releaseYear in all CRUD operations
+[x] 37. Added Release Year input field to upload form (optional, 1900-2100 range)
+[x] 38. Reorganized dashboard layout - category moved to left, year displayed next to title
+[x] 39. Enhanced API search to support both title (case-insensitive partial) and year (exact) matching
+[x] 40. Fixed route order - moved /api/content/search before /api/content/:id to prevent conflicts
+[x] 41. Tested all API endpoints including search by title, year, and URL-encoded queries
+[x] 42. Updated replit.md with complete documentation of release year feature and search improvements
