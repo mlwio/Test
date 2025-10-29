@@ -113,8 +113,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
     return res.json({ user: { id: user.id, username: user.username } });
   });
 
-  // Get all content
-  app.get("/api/content", requireAuth, async (req, res) => {
+  // Get all content (public endpoint)
+  app.get("/api/content", async (req, res) => {
     try {
       const content = await storage.getAllContent();
       return res.json(content);
@@ -124,8 +124,25 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Search content
-  app.get("/api/content/search", requireAuth, async (req, res) => {
+  // Get content by ID (public endpoint)
+  app.get("/api/content/:id", async (req, res) => {
+    try {
+      const { id } = req.params;
+      const content = await storage.getContentById(id);
+
+      if (!content) {
+        return res.status(404).json({ error: "Content not found" });
+      }
+
+      return res.json(content);
+    } catch (error) {
+      console.error("Get content by ID error:", error);
+      return res.status(500).json({ error: "Internal server error" });
+    }
+  });
+
+  // Search content (public endpoint)
+  app.get("/api/content/search", async (req, res) => {
     try {
       const { q, category } = req.query;
 

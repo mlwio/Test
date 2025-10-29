@@ -1,9 +1,18 @@
 import express, { Request, Response, NextFunction } from "express";
+import cors from "cors";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 import "dotenv/config";
 
 const app = express();
+
+// Enable CORS for all routes
+app.use(cors({
+  origin: true, // Allow all origins in development, configure for production
+  credentials: true, // Allow cookies to be sent with requests
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
 
 declare module "http" {
   interface IncomingMessage {
