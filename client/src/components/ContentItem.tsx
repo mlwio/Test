@@ -33,7 +33,7 @@ export function ContentItem({ item, index }: ContentItemProps) {
       data-testid={`card-content-${item._id}`}
     >
       <div 
-        className={`flex flex-col md:flex-row items-start md:items-center gap-3 md:gap-4 p-4 ${isExpandable ? 'cursor-pointer' : ''}`}
+        className={`flex flex-col md:flex-row items-start md:items-center gap-4 md:gap-6 p-4 ${isExpandable ? 'cursor-pointer' : ''}`}
         onClick={() => isExpandable && setExpanded(!expanded)}
       >
         <div className="w-20 h-16 md:w-24 md:h-16 bg-muted rounded-md overflow-hidden flex-shrink-0">
