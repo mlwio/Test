@@ -26,7 +26,7 @@ export function ContentList({ items, category }: ContentListProps) {
       <div className="mb-4 hidden md:flex items-center gap-6 px-4 text-sm font-medium text-muted-foreground">
         <div className="w-24 flex-shrink-0">Thumbnail</div>
         <div className="flex-1 min-w-0 md:min-w-[200px]">Title</div>
-        <div className="w-24 flex-shrink-0">Release Year</div>
+        <div className="w-24 flex-shrink-0">Release Date</div>
         <div className="w-32 flex-shrink-0">Category</div>
         <div className="w-auto flex-shrink-0">Actions</div>
       </div>

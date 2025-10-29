@@ -33,7 +33,7 @@ export function ContentItem({ item, index }: ContentItemProps) {
       data-testid={`card-content-${item._id}`}
     >
       <div 
-        className={`flex flex-col md:flex-row items-start gap-4 md:gap-6 p-4 ${isExpandable ? 'cursor-pointer' : ''}`}
+        className={`flex flex-col md:flex-row items-start md:items-center gap-4 md:gap-6 p-4 ${isExpandable ? 'cursor-pointer' : ''}`}
         onClick={() => isExpandable && setExpanded(!expanded)}
       >
         <div className="w-20 h-16 md:w-24 md:h-16 bg-muted rounded-md overflow-hidden flex-shrink-0">
@@ -57,18 +57,12 @@ export function ContentItem({ item, index }: ContentItemProps) {
           </h3>
         </div>
 
-        <div className="w-24 flex-shrink-0">
-          <div className="text-xs text-muted-foreground/70 mb-1">Release Date</div>
-          <div className="text-sm text-muted-foreground" data-testid={`text-year-${item._id}`}>
-            {item.releaseYear || 'N/A'}
-          </div>
+        <div className="w-24 flex-shrink-0 text-muted-foreground text-sm" data-testid={`text-year-${item._id}`}>
+          {item.releaseYear || 'N/A'}
         </div>
 
-        <div className="w-32 flex-shrink-0">
-          <div className="text-xs text-muted-foreground/70 mb-1">Category</div>
-          <div className="text-sm text-muted-foreground" data-testid={`text-category-${item._id}`}>
-            {item.category}
-          </div>
+        <div className="w-32 flex-shrink-0 text-muted-foreground text-sm" data-testid={`text-category-${item._id}`}>
+          {item.category}
         </div>
 
         <div className="flex items-center gap-2 w-full md:w-auto flex-shrink-0">
