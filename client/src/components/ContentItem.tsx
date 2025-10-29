@@ -22,6 +22,9 @@ export function ContentItem({ item, index }: ContentItemProps) {
         className={`flex flex-col md:flex-row items-start md:items-center gap-3 md:gap-4 p-4 ${isExpandable ? 'cursor-pointer' : ''}`}
         onClick={() => isExpandable && setExpanded(!expanded)}
       >
+        <div className="hidden md:block w-32 text-muted-foreground" data-testid={`text-category-${item._id}`}>
+          {item.category}
+        </div>
         <div className="hidden md:block w-12 text-center text-muted-foreground font-medium">
           {index + 1}
         </div>
@@ -44,15 +47,17 @@ export function ContentItem({ item, index }: ContentItemProps) {
             <div className="md:flex-1 space-y-1 md:space-y-0">
               <h3 className="font-medium text-foreground truncate" data-testid={`text-title-${item._id}`}>
                 {item.title}
+                {item.releaseYear && (
+                  <span className="text-muted-foreground ml-2" data-testid={`text-year-${item._id}`}>
+                    ({item.releaseYear})
+                  </span>
+                )}
               </h3>
               <div className="text-sm md:hidden text-muted-foreground" data-testid={`text-category-mobile-${item._id}`}>
                 {item.category}
               </div>
             </div>
           </div>
-        </div>
-        <div className="hidden md:block w-32 text-muted-foreground" data-testid={`text-category-${item._id}`}>
-          {item.category}
         </div>
         <div className="flex items-center gap-2 w-full md:w-auto">
           {item.category === "Movie" && item.driveLink && (

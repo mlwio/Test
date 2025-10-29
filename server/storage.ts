@@ -104,7 +104,10 @@ export class MemStorage implements IStorage {
   async searchContent(query: string, category?: string): Promise<ContentItem[]> {
     return Array.from(this.content.values())
       .filter(item => {
-        const matchesQuery = item.title.toLowerCase().includes(query.toLowerCase());
+        const lowerQuery = query.toLowerCase();
+        const matchesTitle = item.title.toLowerCase().includes(lowerQuery);
+        const matchesYear = item.releaseYear ? item.releaseYear.toString().includes(query) : false;
+        const matchesQuery = matchesTitle || matchesYear;
         const matchesCategory = !category || item.category === category;
         return matchesQuery && matchesCategory;
       })
@@ -251,9 +254,16 @@ export class DbStorage implements IStorage {
   }
 
   async searchContent(query: string, category?: string): Promise<ContentItem[]> {
-    const filter: any = {
-      title: { $regex: query, $options: 'i' }
-    };
+    const orConditions: any[] = [
+      { title: { $regex: query, $options: 'i' } }
+    ];
+    
+    // If query is a number, also search by release year
+    if (!isNaN(parseInt(query))) {
+      orConditions.push({ releaseYear: parseInt(query) });
+    }
+    
+    const filter: any = { $or: orConditions };
     
     if (category) {
       filter.category = category;

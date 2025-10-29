@@ -124,6 +124,27 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Search content (public endpoint) - MUST be before :id route
+  app.get("/api/content/search", async (req, res) => {
+    try {
+      const { q, category } = req.query;
+
+      if (!q || typeof q !== "string") {
+        return res.status(400).json({ error: "Search query required" });
+      }
+
+      const content = await storage.searchContent(
+        q,
+        category && typeof category === "string" ? category : undefined
+      );
+
+      return res.json(content);
+    } catch (error) {
+      console.error("Search content error:", error);
+      return res.status(500).json({ error: "Internal server error" });
+    }
+  });
+
   // Get content by ID (public endpoint)
   app.get("/api/content/:id", async (req, res) => {
     try {
@@ -141,27 +162,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(404).json({ error: "Content not found" });
       }
       console.error("Get content by ID error:", error);
-      return res.status(500).json({ error: "Internal server error" });
-    }
-  });
-
-  // Search content (public endpoint)
-  app.get("/api/content/search", async (req, res) => {
-    try {
-      const { q, category } = req.query;
-
-      if (!q || typeof q !== "string") {
-        return res.status(400).json({ error: "Search query required" });
-      }
-
-      const content = await storage.searchContent(
-        q,
-        category && typeof category === "string" ? category : undefined
-      );
-
-      return res.json(content);
-    } catch (error) {
-      console.error("Search content error:", error);
       return res.status(500).json({ error: "Internal server error" });
     }
   });
