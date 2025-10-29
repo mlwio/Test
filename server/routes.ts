@@ -242,7 +242,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Download endpoint - proxies the file download with proper headers
+  // Download endpoint - redirects to Google Drive download with proper format
   app.get("/api/download", async (req, res) => {
     try {
       const { url, title } = req.query;
@@ -257,65 +257,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       console.log(`✅ Download requested: ${filename}`);
 
-      // For Google Drive links, convert to direct download format with confirmation bypass
+      // For Google Drive links, convert to direct download format
       let downloadUrl = url;
       if (url.includes('drive.google.com')) {
         const fileIdMatch = url.match(/\/d\/([^\/]+)/);
         if (fileIdMatch) {
+          // Use the direct download URL format
           downloadUrl = `https://drive.google.com/uc?export=download&id=${fileIdMatch[1]}&confirm=t`;
         }
       }
 
-      // Fetch the file from the source
-      const response = await fetch(downloadUrl);
-      
-      if (!response.ok) {
-        throw new Error(`Failed to fetch file: ${response.statusText}`);
-      }
-
-      // Check if Google Drive returned a virus scan warning page
-      const contentType = response.headers.get('content-type') || '';
-      if (contentType.includes('text/html')) {
-        // This is likely a virus scan warning page, try to extract the real download link
-        const html = await response.text();
-        const confirmMatch = html.match(/href="([^"]*uc\?export=download[^"]*)"/);
-        
-        if (confirmMatch) {
-          const realUrl = confirmMatch[1].replace(/&amp;/g, '&');
-          const secondResponse = await fetch('https://drive.google.com' + realUrl);
-          
-          // Set download headers
-          res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
-          res.setHeader('Content-Type', 'application/octet-stream');
-          
-          // Stream the file to the client
-          if (secondResponse.body) {
-            const reader = secondResponse.body.getReader();
-            while (true) {
-              const { done, value } = await reader.read();
-              if (done) break;
-              res.write(Buffer.from(value));
-            }
-          }
-          return res.end();
-        }
-      }
-
-      // Set headers for immediate download
-      res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
-      res.setHeader('Content-Type', 'application/octet-stream');
-      
-      // Stream the file to the client
-      if (response.body) {
-        const reader = response.body.getReader();
-        while (true) {
-          const { done, value } = await reader.read();
-          if (done) break;
-          res.write(Buffer.from(value));
-        }
-      }
-      
-      return res.end();
+      // Redirect to the download URL
+      console.log(`✅ Redirecting to: ${downloadUrl}`);
+      return res.redirect(downloadUrl);
     } catch (error) {
       console.error("Download error:", error);
       return res.status(500).json({ error: "Download failed" });
