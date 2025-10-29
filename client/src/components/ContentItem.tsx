@@ -57,12 +57,18 @@ export function ContentItem({ item, index }: ContentItemProps) {
           </h3>
         </div>
 
-        <div className="w-24 flex-shrink-0 text-muted-foreground text-sm" data-testid={`text-year-${item._id}`}>
-          {item.releaseYear || 'N/A'}
+        <div className="w-24 flex-shrink-0">
+          <div className="text-xs text-muted-foreground/70 mb-0.5">Release Date</div>
+          <div className="text-sm text-muted-foreground" data-testid={`text-year-${item._id}`}>
+            {item.releaseYear || 'N/A'}
+          </div>
         </div>
 
-        <div className="w-32 flex-shrink-0 text-muted-foreground text-sm" data-testid={`text-category-${item._id}`}>
-          {item.category}
+        <div className="w-32 flex-shrink-0">
+          <div className="text-xs text-muted-foreground/70 mb-0.5">Category</div>
+          <div className="text-sm text-muted-foreground" data-testid={`text-category-${item._id}`}>
+            {item.category}
+          </div>
         </div>
 
         <div className="flex items-center gap-2 w-full md:w-auto flex-shrink-0">
