@@ -30,6 +30,7 @@ interface EditDialogProps {
 export function EditDialog({ open, onOpenChange, items }: EditDialogProps) {
   const [selectedItemId, setSelectedItemId] = useState("");
   const [title, setTitle] = useState("");
+  const [releaseYear, setReleaseYear] = useState("");
   const [category, setCategory] = useState("Movie");
   const [thumbnail, setThumbnail] = useState("");
   const [driveLink, setDriveLink] = useState("");
@@ -49,6 +50,7 @@ export function EditDialog({ open, onOpenChange, items }: EditDialogProps) {
   useEffect(() => {
     if (selectedItem && step === "edit") {
       setTitle(selectedItem.title);
+      setReleaseYear(selectedItem.releaseYear ? selectedItem.releaseYear.toString() : "");
       setCategory(selectedItem.category);
       setThumbnail(selectedItem.thumbnail);
       setDriveLink(selectedItem.driveLink || "");
@@ -92,6 +94,7 @@ export function EditDialog({ open, onOpenChange, items }: EditDialogProps) {
   const handleClose = () => {
     setSelectedItemId("");
     setTitle("");
+    setReleaseYear("");
     setCategory("Movie");
     setThumbnail("");
     setDriveLink("");
@@ -111,7 +114,7 @@ export function EditDialog({ open, onOpenChange, items }: EditDialogProps) {
   };
 
   const handleUpdate = () => {
-    if (!title || !thumbnail) {
+    if (!title || !thumbnail || !releaseYear) {
       setError("Please fill in all required fields");
       return;
     }
@@ -123,6 +126,7 @@ export function EditDialog({ open, onOpenChange, items }: EditDialogProps) {
 
     const contentData = {
       title,
+      releaseYear: parseInt(releaseYear),
       category,
       thumbnail,
       driveLink: category === "Movie" ? driveLink : undefined,
@@ -207,6 +211,19 @@ export function EditDialog({ open, onOpenChange, items }: EditDialogProps) {
                   onChange={(e) => setTitle(e.target.value)}
                   placeholder="Enter title"
                   data-testid="input-edit-title"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label>Release Year</Label>
+                <Input
+                  type="number"
+                  value={releaseYear}
+                  onChange={(e) => setReleaseYear(e.target.value)}
+                  min="1900"
+                  max="2100"
+                  required
+                  data-testid="input-edit-release-year"
                 />
               </div>
 

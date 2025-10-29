@@ -23,9 +23,16 @@ export function ContentList({ items, category }: ContentListProps) {
 
   return (
     <div className="px-4 md:px-6 py-6">
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
-        {filteredItems.map((item) => (
-          <ContentItem key={item._id} item={item} />
+      <div className="mb-4 hidden md:flex items-center gap-4 px-4 text-sm font-medium text-muted-foreground">
+        <div className="w-24">Thumbnail</div>
+        <div className="flex-1 min-w-[200px]">Title</div>
+        <div className="w-24">Release Year</div>
+        <div className="w-32">Category</div>
+        <div className="w-24"></div>
+      </div>
+      <div className="space-y-3">
+        {filteredItems.map((item, index) => (
+          <ContentItem key={item._id} item={item} index={index} />
         ))}
       </div>
     </div>
