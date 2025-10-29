@@ -242,6 +242,100 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Download endpoint - proxies the file download with proper headers
+  app.get("/api/download", async (req, res) => {
+    try {
+      const { url, title } = req.query;
+
+      if (!url || typeof url !== "string") {
+        return res.status(400).json({ error: "Download URL required" });
+      }
+
+      const filename = title && typeof title === "string" 
+        ? `${title.replace(/[^a-z0-9\s]/gi, '_').replace(/\s+/g, '_')}.mp4` 
+        : "video.mp4";
+
+      console.log(`✅ Download requested: ${filename}`);
+
+      // For Google Drive links, convert to direct download format with confirmation bypass
+      let downloadUrl = url;
+      if (url.includes('drive.google.com')) {
+        const fileIdMatch = url.match(/\/d\/([^\/]+)/);
+        if (fileIdMatch) {
+          downloadUrl = `https://drive.google.com/uc?export=download&id=${fileIdMatch[1]}&confirm=t`;
+        }
+      }
+
+      // Fetch the file from the source
+      const response = await fetch(downloadUrl);
+      
+      if (!response.ok) {
+        throw new Error(`Failed to fetch file: ${response.statusText}`);
+      }
+
+      // Check if Google Drive returned a virus scan warning page
+      const contentType = response.headers.get('content-type') || '';
+      if (contentType.includes('text/html')) {
+        // This is likely a virus scan warning page, try to extract the real download link
+        const html = await response.text();
+        const confirmMatch = html.match(/href="([^"]*uc\?export=download[^"]*)"/);
+        
+        if (confirmMatch) {
+          const realUrl = confirmMatch[1].replace(/&amp;/g, '&');
+          const secondResponse = await fetch('https://drive.google.com' + realUrl);
+          
+          // Set download headers
+          res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+          res.setHeader('Content-Type', 'application/octet-stream');
+          
+          // Stream the file to the client
+          if (secondResponse.body) {
+            const reader = secondResponse.body.getReader();
+            while (true) {
+              const { done, value } = await reader.read();
+              if (done) break;
+              res.write(Buffer.from(value));
+            }
+          }
+          return res.end();
+        }
+      }
+
+      // Set headers for immediate download
+      res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+      res.setHeader('Content-Type', 'application/octet-stream');
+      
+      // Stream the file to the client
+      if (response.body) {
+        const reader = response.body.getReader();
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          res.write(Buffer.from(value));
+        }
+      }
+      
+      return res.end();
+    } catch (error) {
+      console.error("Download error:", error);
+      return res.status(500).json({ error: "Download failed" });
+    }
+  });
+
+  // Health check endpoint - verifies app responds to requests
+  app.get("/api/health", (req, res) => {
+    return res.json({ 
+      status: "ok", 
+      timestamp: new Date().toISOString(),
+      service: "MLWIO API",
+      endpoints: {
+        auth: "/api/auth/login",
+        content: "/api/content",
+        download: "/api/download"
+      }
+    });
+  });
+
   const httpServer = createServer(app);
 
   return httpServer;

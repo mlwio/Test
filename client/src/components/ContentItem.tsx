@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ChevronDown, ChevronRight, ExternalLink } from "lucide-react";
+import { ChevronDown, ChevronRight, ExternalLink, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { ContentItem as ContentItemType } from "@shared/schema";
 
@@ -12,6 +12,20 @@ export function ContentItem({ item, index }: ContentItemProps) {
   const [expanded, setExpanded] = useState(false);
 
   const isExpandable = item.category === "Anime" || item.category === "Web Series";
+
+  const handleDownload = (url: string, title: string) => {
+    // Use the backend API endpoint for download
+    const downloadUrl = `/api/download?url=${encodeURIComponent(url)}&title=${encodeURIComponent(title)}`;
+    
+    // Create a hidden anchor element and trigger download
+    const link = document.createElement('a');
+    link.href = downloadUrl;
+    link.target = '_blank';
+    link.rel = 'noopener noreferrer';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
 
   return (
     <div 
@@ -51,21 +65,36 @@ export function ContentItem({ item, index }: ContentItemProps) {
           {item.category}
         </div>
 
-        <div className="flex items-center gap-2 w-full md:w-24">
+        <div className="flex items-center gap-2 w-full md:w-auto">
           {item.category === "Movie" && item.driveLink && (
-            <Button 
-              variant="outline" 
-              size="sm"
-              onClick={(e) => {
-                e.stopPropagation();
-                window.open(item.driveLink!, '_blank');
-              }}
-              className="flex-1 md:flex-initial"
-              data-testid={`button-watch-${item._id}`}
-            >
-              <ExternalLink className="mr-2 h-4 w-4" />
-              Watch
-            </Button>
+            <>
+              <Button 
+                variant="outline" 
+                size="sm"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  window.open(item.driveLink!, '_blank');
+                }}
+                className="flex-1 md:flex-initial"
+                data-testid={`button-watch-${item._id}`}
+              >
+                <ExternalLink className="mr-2 h-4 w-4" />
+                Watch
+              </Button>
+              <Button 
+                variant="outline" 
+                size="sm"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleDownload(item.driveLink!, item.title);
+                }}
+                className="flex-1 md:flex-initial"
+                data-testid={`button-download-${item._id}`}
+              >
+                <Download className="mr-2 h-4 w-4" />
+                Download
+              </Button>
+            </>
           )}
           {isExpandable && (
             <div className="w-8 flex items-center justify-center ml-auto md:ml-0">
