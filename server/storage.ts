@@ -77,7 +77,12 @@ export class MemStorage implements IStorage {
     const id = String(this.nextContentId++);
     const item: ContentItem = {
       _id: id,
-      ...content,
+      title: content.title,
+      category: content.category,
+      thumbnail: content.thumbnail,
+      releaseYear: content.releaseYear,
+      driveLink: content.driveLink,
+      seasons: content.seasons,
       createdAt: new Date(),
     };
     this.content.set(id, item);
@@ -116,7 +121,12 @@ export class MemStorage implements IStorage {
     
     const updated: ContentItem = {
       _id: id,
-      ...content,
+      title: content.title,
+      category: content.category,
+      thumbnail: content.thumbnail,
+      releaseYear: content.releaseYear,
+      driveLink: content.driveLink,
+      seasons: content.seasons,
       createdAt: existing.createdAt,
     };
     this.content.set(id, updated);
@@ -205,6 +215,7 @@ export class DbStorage implements IStorage {
       title: item.title,
       category: item.category,
       thumbnail: item.thumbnail,
+      releaseYear: item.releaseYear,
       driveLink: item.driveLink,
       seasons: item.seasons,
       createdAt: item.createdAt,
@@ -218,6 +229,7 @@ export class DbStorage implements IStorage {
       title: item.title,
       category: item.category,
       thumbnail: item.thumbnail,
+      releaseYear: item.releaseYear,
       driveLink: item.driveLink,
       seasons: item.seasons,
       createdAt: item.createdAt,
@@ -231,6 +243,7 @@ export class DbStorage implements IStorage {
       title: item.title,
       category: item.category,
       thumbnail: item.thumbnail,
+      releaseYear: item.releaseYear,
       driveLink: item.driveLink,
       seasons: item.seasons,
       createdAt: item.createdAt,
@@ -252,6 +265,7 @@ export class DbStorage implements IStorage {
       title: item.title,
       category: item.category,
       thumbnail: item.thumbnail,
+      releaseYear: item.releaseYear,
       driveLink: item.driveLink,
       seasons: item.seasons,
       createdAt: item.createdAt,
@@ -266,6 +280,7 @@ export class DbStorage implements IStorage {
       title: item.title,
       category: item.category,
       thumbnail: item.thumbnail,
+      releaseYear: item.releaseYear,
       driveLink: item.driveLink,
       seasons: item.seasons,
       createdAt: item.createdAt,
@@ -280,6 +295,7 @@ export class DbStorage implements IStorage {
       title: item.title,
       category: item.category,
       thumbnail: item.thumbnail,
+      releaseYear: item.releaseYear,
       driveLink: item.driveLink,
       seasons: item.seasons,
       createdAt: item.createdAt,

@@ -42,6 +42,7 @@ export interface IContentItem extends Document {
   title: string;
   category: string;
   thumbnail: string;
+  releaseYear?: number;
   driveLink?: string;
   seasons?: Season[];
   createdAt: Date;
@@ -59,6 +60,7 @@ const contentItemSchema = new Schema<IContentItem>({
   title: { type: String, required: true },
   category: { type: String, required: true },
   thumbnail: { type: String, required: true },
+  releaseYear: { type: Number },
   driveLink: { type: String },
   seasons: [seasonSchema],
   createdAt: { type: Date, required: true, default: Date.now },
@@ -70,6 +72,7 @@ export const insertContentItemSchema = z.object({
   title: z.string().min(1),
   category: z.string().min(1),
   thumbnail: z.string().min(1),
+  releaseYear: z.number().optional(),
   driveLink: z.string().optional(),
   seasons: z.array(z.object({
     seasonNumber: z.number(),
@@ -86,6 +89,7 @@ export type ContentItem = {
   title: string;
   category: string;
   thumbnail: string;
+  releaseYear?: number;
   driveLink?: string;
   seasons?: Season[];
   createdAt: Date;

@@ -28,6 +28,7 @@ export default function UploadPage() {
   const [, setLocation] = useLocation();
   const { toast } = useToast();
   const [title, setTitle] = useState("");
+  const [releaseYear, setReleaseYear] = useState("");
   const [category, setCategory] = useState("Movie");
   const [thumbnail, setThumbnail] = useState("");
   const [driveLink, setDriveLink] = useState("");
@@ -103,6 +104,7 @@ export default function UploadPage() {
       title,
       category,
       thumbnail,
+      releaseYear: releaseYear ? parseInt(releaseYear) : undefined,
       driveLink: category === "Movie" ? driveLink : undefined,
       seasons:
         category !== "Movie"
@@ -135,9 +137,23 @@ export default function UploadPage() {
                   id="title"
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
-                  placeholder="Enter title"
+                  placeholder="Enter title (e.g., Iron Man 1)"
                   required
                   data-testid="input-title"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="releaseYear">Release Year (Optional)</Label>
+                <Input
+                  id="releaseYear"
+                  type="number"
+                  value={releaseYear}
+                  onChange={(e) => setReleaseYear(e.target.value)}
+                  placeholder="Enter release year (e.g., 2008)"
+                  min="1900"
+                  max="2100"
+                  data-testid="input-release-year"
                 />
               </div>
 
